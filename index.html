@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <title>Important Question 👀</title>
+    <title>Happy Birthday! 🎉</title>
     <style>
         * {
             margin: 0;
@@ -27,12 +27,24 @@
             padding: 40px;
         }
 
-        .question-screen {
-            display: block;
+        .screen {
+            display: none;
         }
 
-        .question-screen.hidden {
-            display: none;
+        .screen.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
 
         h1 {
@@ -81,20 +93,6 @@
             pointer-events: none;
         }
 
-        .no-btn:hover {
-            background: #D0D0D0;
-        }
-
-        .result-screen {
-            display: none;
-            position: relative;
-        }
-
-        .result-screen.visible {
-            display: block;
-            animation: fadeIn 0.5s ease;
-        }
-
         .result-screen img {
             width: 100%;
             max-width: 400px;
@@ -109,6 +107,7 @@
             line-height: 1.8;
             color: #333;
             text-align: center;
+            margin-bottom: 30px;
         }
 
         .result-screen strong {
@@ -119,30 +118,160 @@
             font-weight: bold;
         }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: scale(0.9);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
+        .cake-btn, .blow-btn {
+            background: #FF6B9D;
+            color: white;
+            cursor: pointer;
+            margin-top: 20px;
+            font-size: 1.2em;
+            padding: 15px 40px;
         }
 
-        .confetti {
-            position: fixed;
-            width: 10px;
-            height: 10px;
-            background: #f0f;
+        .cake-btn:hover, .blow-btn:hover {
+            background: #FF5A8D;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 107, 157, 0.3);
+        }
+
+        .cake-container {
+            margin: 50px auto;
+            position: relative;
+        }
+
+        .cake {
+            width: 200px;
+            height: 180px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .cake-layer {
+            width: 200px;
+            height: 60px;
+            background: linear-gradient(to right, #FFB6C1, #FF69B4, #FFB6C1);
+            border-radius: 10px;
             position: absolute;
-            animation: confetti-fall linear forwards;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            animation: dropIn 0.6s ease-out forwards;
+            opacity: 0;
+            transform: translateY(-100px);
         }
 
-        @keyframes confetti-fall {
-            to {
-                transform: translateY(100vh) rotate(360deg);
+        @keyframes dropIn {
+            0% {
                 opacity: 0;
+                transform: translateY(-100px);
+            }
+            60% {
+                transform: translateY(5px);
+            }
+            80% {
+                transform: translateY(-2px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .layer1 {
+            bottom: 0;
+            animation-delay: 0.4s;
+        }
+
+        .layer2 {
+            bottom: 55px;
+            width: 180px;
+            left: 10px;
+            background: linear-gradient(to right, #FFC0CB, #FF1493, #FFC0CB);
+            animation-delay: 0.2s;
+        }
+
+        .layer3 {
+            bottom: 110px;
+            width: 160px;
+            left: 20px;
+            background: linear-gradient(to right, #FFB6C1, #FF69B4, #FFB6C1);
+            animation-delay: 0s;
+        }
+
+        .frosting {
+            position: absolute;
+            bottom: -5px;
+            width: 100%;
+            height: 10px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .candles-container {
+            position: absolute;
+            top: -40px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .candle {
+            width: 8px;
+            height: 40px;
+            background: linear-gradient(to bottom, #FFD700, #FFA500);
+            border-radius: 2px;
+            position: relative;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .flame {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 10px;
+            height: 15px;
+            background: #FF6B00;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            animation: flicker 0.3s infinite alternate;
+        }
+
+        .flame::before {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 6px;
+            height: 10px;
+            background: #FFD700;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+        }
+
+        @keyframes flicker {
+            0% {
+                transform: translateX(-50%) scale(1);
+            }
+            100% {
+                transform: translateX(-50%) scale(1.1);
+            }
+        }
+
+        .flame.blown {
+            animation: blowOut 0.5s forwards;
+        }
+
+        @keyframes blowOut {
+            0% {
+                opacity: 1;
+                transform: translateX(-50%) scale(1);
+            }
+            50% {
+                opacity: 0.5;
+                transform: translateX(-50%) scale(0.5) translateY(-10px);
+            }
+            100% {
+                opacity: 0;
+                transform: translateX(-50%) scale(0) translateY(-20px);
             }
         }
 
@@ -154,29 +283,103 @@
             height: 100%;
             pointer-events: none;
             overflow: hidden;
+            z-index: 1000;
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            animation: confetti-fall linear forwards;
+        }
+
+        @keyframes confetti-fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .final-message {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #FF6B9D;
+            margin-top: 40px;
+            animation: pulse 1s infinite alternate;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            100% {
+                transform: scale(1.05);
+            }
+        }
+
+        .hidden {
+            display: none !important;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="question-screen" id="questionScreen">
-            <h1>Do you accept that you're officially closer to 30 than 20? 😎</h1>
+        <!-- Question Screen -->
+        <div class="screen active" id="questionScreen">
+            <h1>Do you accept that you're officially closer to 30 than 20? 🎂</h1>
             <div class="buttons-container" id="buttonsContainer">
                 <button class="yes-btn" id="yesBtn">Yes! 🎉</button>
                 <button class="no-btn" id="noBtn">No 😢</button>
             </div>
         </div>
 
-        <div class="result-screen" id="resultScreen">
-            <img src="https://i.giphy.com/l0MYt5jPR6QX5pnqM.gif" 
-                 alt="Birthday celebration">
+        <!-- Birthday Message Screen -->
+        <div class="screen" id="resultScreen">
+            <img src="https://i.giphy.com/l0MYt5jPR6QX5pnqM.gif" alt="Birthday celebration">
             <p>
                 🚨 <strong>Quarter-Life Existential Crisis Activated</strong> 🚨<br><br>
                 Age: <b>Closer to 30! 🐒</b><br>
                 Relationship status: <b>Still single & hot ❤️‍🔥</b><br>
-                My bday wish for you: <b>I hope you get to celebrate the next Valentine's Day with your man of dreams 😉</b><br>
-                <strong>Happiest 25, Amruthaaaaaa Varshiniiii!!! 🎉</strong>
+                My bday wish for you: <b>I hope you get to celebrate the next Valentine's Day with your man of dreams 😉</b>
             </p>
+            <button class="cake-btn" id="cakeBtn">🎂 Cut the cake now</button>
+        </div>
+
+        <!-- Cake Screen -->
+        <div class="screen" id="cakeScreen">
+            <h1>Time to cut the cake! 🎂</h1>
+            <div class="cake-container">
+                <div class="cake">
+                    <div class="candles-container" id="candlesContainer">
+                        <div class="candle">
+                            <div class="flame"></div>
+                        </div>
+                        <div class="candle">
+                            <div class="flame"></div>
+                        </div>
+                        <div class="candle">
+                            <div class="flame"></div>
+                        </div>
+                    </div>
+                    <div class="cake-layer layer3">
+                        <div class="frosting"></div>
+                    </div>
+                    <div class="cake-layer layer2">
+                        <div class="frosting"></div>
+                    </div>
+                    <div class="cake-layer layer1">
+                        <div class="frosting"></div>
+                    </div>
+                </div>
+            </div>
+            <button class="blow-btn" id="blowBtn">Click here to blow the candles 💨</button>
+        </div>
+
+        <!-- Final Screen -->
+        <div class="screen" id="finalScreen">
+            <div class="final-message">
+                HAPPY BIRTHDAY AMRUTHAAAAA!!! 🎉❤️‍🔥
+            </div>
         </div>
     </div>
 
@@ -187,15 +390,18 @@
         const yesBtn = document.getElementById('yesBtn');
         const questionScreen = document.getElementById('questionScreen');
         const resultScreen = document.getElementById('resultScreen');
-        const buttonsContainer = document.getElementById('buttonsContainer');
+        const cakeScreen = document.getElementById('cakeScreen');
+        const finalScreen = document.getElementById('finalScreen');
+        const cakeBtn = document.getElementById('cakeBtn');
+        const blowBtn = document.getElementById('blowBtn');
         const confettiContainer = document.getElementById('confettiContainer');
 
         let lastMoveTime = 0;
-        const moveCooldown = 100; // milliseconds
+        const moveCooldown = 100;
 
-        // Track mouse movement for proximity detection
+        // No button movement logic
         document.addEventListener('mousemove', (e) => {
-            if (resultScreen.classList.contains('visible')) return;
+            if (!questionScreen.classList.contains('active')) return;
             
             const now = Date.now();
             if (now - lastMoveTime < moveCooldown) return;
@@ -207,32 +413,26 @@
             const mouseX = e.clientX;
             const mouseY = e.clientY;
             
-            // Calculate distance from cursor to button center
             const distance = Math.sqrt(
                 Math.pow(mouseX - noBtnCenterX, 2) + 
                 Math.pow(mouseY - noBtnCenterY, 2)
             );
             
-            const threshold = 290; // Distance in pixels to trigger movement
+            const threshold = 120;
             
             if (distance < threshold) {
                 lastMoveTime = now;
                 
-                // Calculate direction away from cursor
                 const angle = Math.atan2(noBtnCenterY - mouseY, noBtnCenterX - mouseX);
-                
-                // Move button away from cursor
                 const moveDistance = 200;
                 const newX = Math.cos(angle) * moveDistance;
                 const newY = Math.sin(angle) * moveDistance;
                 
-                // Get viewport bounds
                 const maxX = (window.innerWidth - noBtnRect.width) / 2 - noBtnRect.left - noBtnRect.width / 2;
                 const minX = -noBtnRect.left - noBtnRect.width / 2 + 20;
                 const maxY = (window.innerHeight - noBtnRect.height) / 2 - noBtnRect.top - noBtnRect.height / 2;
                 const minY = -noBtnRect.top - noBtnRect.height / 2 + 20;
                 
-                // Clamp values to keep button in viewport
                 const clampedX = Math.max(minX, Math.min(maxX, newX));
                 const clampedY = Math.max(minY, Math.min(maxY, newY));
                 
@@ -240,17 +440,40 @@
             }
         });
 
-        // Yes button click handler
+        // Screen transitions
+        function showScreen(screen) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            screen.classList.add('active');
+        }
+
         yesBtn.addEventListener('click', () => {
-            questionScreen.classList.add('hidden');
-            resultScreen.classList.add('visible');
-            createConfetti();
+            showScreen(resultScreen);
         });
 
-        // Create confetti animation
+        cakeBtn.addEventListener('click', () => {
+            showScreen(cakeScreen);
+        });
+
+        blowBtn.addEventListener('click', () => {
+            // Blow out candles
+            const flames = document.querySelectorAll('.flame');
+            flames.forEach((flame, index) => {
+                setTimeout(() => {
+                    flame.classList.add('blown');
+                }, index * 100);
+            });
+
+            // Show final screen and confetti after candles blown
+            setTimeout(() => {
+                showScreen(finalScreen);
+                createConfetti();
+            }, 800);
+        });
+
+        // Confetti animation
         function createConfetti() {
-            const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#f9ca24', '#6c5ce7', '#fd79a8', '#a29bfe'];
-            const confettiCount = 100;
+            const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#f9ca24', '#6c5ce7', '#fd79a8', '#a29bfe', '#FF6B9D'];
+            const confettiCount = 150;
             
             for (let i = 0; i < confettiCount; i++) {
                 setTimeout(() => {
@@ -266,11 +489,10 @@
                     
                     confettiContainer.appendChild(confetti);
                     
-                    // Remove confetti after animation
                     setTimeout(() => {
                         confetti.remove();
                     }, 5000);
-                }, i * 30);
+                }, i * 20);
             }
         }
     </script>
