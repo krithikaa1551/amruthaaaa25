@@ -1,157 +1,278 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Important Question 👀</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday! 🎉</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #ffffff;
-      height: 100vh;
-      margin: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      overflow: hidden;
-    }
+        body {
+            font-family: 'Arial', sans-serif;
+            background: white;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
 
-    .container {
-      max-width: 500px;
-      padding: 20px;
-      position: relative;
-      z-index: 2;
-    }
+        .container {
+            text-align: center;
+            max-width: 600px;
+            padding: 40px;
+        }
 
-    h1 {
-      font-size: 24px;
-      margin-bottom: 40px;
-    }
+        .question-screen {
+            display: block;
+        }
 
-    button {
-      padding: 12px 22px;
-      font-size: 16px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-    }
+        .question-screen.hidden {
+            display: none;
+        }
 
-    #yesBtn {
-      background-color: #ff5a8a;
-      color: #fff;
-      margin-right: 20px;
-    }
+        h1 {
+            font-size: 2.2em;
+            margin-bottom: 40px;
+            color: #000;
+            font-weight: 600;
+            line-height: 1.4;
+        }
 
-    #noBtn {
-      background-color: #ddd;
-      position: absolute;
-      left: 60%;
-      top: 65%;
-      transition: transform 0.3s ease; /* smooth slide */
-    }
+        .buttons-container {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            align-items: center;
+            margin-top: 30px;
+            min-height: 80px;
+        }
 
-    .result {
-      display: none;
-      opacity: 0;
-      animation: fadeIn 1.2s ease forwards;
-    }
+        button {
+            padding: 12px 32px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
 
-    img {
-      max-width: 100%;
-      border-radius: 12px;
-      margin-bottom: 20px;
-    }
+        .yes-btn {
+            background: #FF6B9D;
+            color: white;
+            cursor: pointer;
+        }
 
-    @keyframes fadeIn {
-      to { opacity: 1; }
-    }
+        .yes-btn:hover {
+            background: #FF5A8D;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 107, 157, 0.3);
+        }
 
-    /* Confetti */
-    .confetti {
-      position: fixed;
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      animation: fall 2.5s ease forwards;
-      z-index: 1;
-    }
+        .no-btn {
+            background: #E0E0E0;
+            color: #333;
+            transition: transform 0.2s ease, background 0.2s ease;
+            cursor: default;
+            pointer-events: none;
+        }
 
-    @keyframes fall {
-      0% { transform: translateY(-20px); opacity: 1; }
-      100% { transform: translateY(60px); opacity: 0; }
-    }
-  </style>
+        .no-btn:hover {
+            background: #D0D0D0;
+        }
+
+        .result-screen {
+            display: none;
+            position: relative;
+        }
+
+        .result-screen.visible {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .result-screen img {
+            width: 100%;
+            max-width: 400px;
+            display: block;
+            margin: 0 auto 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .result-screen p {
+            font-size: 1.3em;
+            line-height: 1.8;
+            color: #333;
+            text-align: center;
+        }
+
+        .result-screen strong {
+            font-weight: bold;
+        }
+
+        .result-screen b {
+            font-weight: bold;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #f0f;
+            position: absolute;
+            animation: confetti-fall linear forwards;
+        }
+
+        @keyframes confetti-fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+    </style>
 </head>
-
 <body>
+    <div class="container">
+        <div class="question-screen" id="questionScreen">
+            <h1>Do you accept that you're officially closer to 30 than 20? 🎂</h1>
+            <div class="buttons-container" id="buttonsContainer">
+                <button class="yes-btn" id="yesBtn">Yes! 🎉</button>
+                <button class="no-btn" id="noBtn">No 😢</button>
+            </div>
+        </div>
 
-  <!-- Question -->
-  <div class="container" id="question">
-    <h1>Do you accept that you’re officially closer to 30 than 20?</h1>
-    <button id="yesBtn">Yes</button>
-    <button id="noBtn">No</button>
-  </div>
+        <div class="result-screen" id="resultScreen">
+            <img src="https://i.giphy.com/l0MYt5jPR6QX5pnqM.gif" 
+                 alt="Birthday celebration">
+            <p>
+                🚨 <strong>Quarter-Life Existential Crisis Activated</strong> 🚨<br><br>
+                Age: <b>Closer to 30! 🐒</b><br>
+                Relationship status: <b>Still single & hot ❤️‍🔥</b><br>
+                My bday wish for you: <b>I hope you get to celebrate the next Valentine's Day with your man of dreams 😉</b><br>
+                <strong>Happiest 25, Amruthaaaaaa Varshiniiii!!! 🎉</strong>
+            </p>
+        </div>
+    </div>
 
-  <!-- Result -->
-  <div class="container result" id="result">
-    <img src="https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif">
-    <p>
-      🚨 <strong>Quarter-Life Existential Crisis Activated</strong> 🚨<br><br>
-      <strong>Age:</strong> <b>Closer to 30! 🐒</b><br>
-      <strong>Relationship status:</strong> <b>Still single & hot ❤️‍🔥</b><br>
-      <strong>My bday wish for you:</strong><br>
-      <b>I hope you get to celebrate the next Valentine’s Day with your man of dreams 😉</b><br><br>
-      <strong>Happiest 25, Amruthaaaaaa Varshiniiii!!! 🎉</strong>
-    </p>
-  </div>
+    <div class="confetti-container" id="confettiContainer"></div>
 
-  <script>
-    const noBtn = document.getElementById("noBtn");
-    const yesBtn = document.getElementById("yesBtn");
-    const question = document.getElementById("question");
-    const result = document.getElementById("result");
+    <script>
+        const noBtn = document.getElementById('noBtn');
+        const yesBtn = document.getElementById('yesBtn');
+        const questionScreen = document.getElementById('questionScreen');
+        const resultScreen = document.getElementById('resultScreen');
+        const buttonsContainer = document.getElementById('buttonsContainer');
+        const confettiContainer = document.getElementById('confettiContainer');
 
-    let lastMove = 0;
+        let lastMoveTime = 0;
+        const moveCooldown = 100; // milliseconds
 
-    // Cursor proximity detection (THIS is the fix)
-    document.addEventListener("mousemove", (e) => {
-      const now = Date.now();
-      if (now - lastMove < 300) return; // cooldown
+        // Track mouse movement for proximity detection
+        document.addEventListener('mousemove', (e) => {
+            if (resultScreen.classList.contains('visible')) return;
+            
+            const now = Date.now();
+            if (now - lastMoveTime < moveCooldown) return;
+            
+            const noBtnRect = noBtn.getBoundingClientRect();
+            const noBtnCenterX = noBtnRect.left + noBtnRect.width / 2;
+            const noBtnCenterY = noBtnRect.top + noBtnRect.height / 2;
+            
+            const mouseX = e.clientX;
+            const mouseY = e.clientY;
+            
+            // Calculate distance from cursor to button center
+            const distance = Math.sqrt(
+                Math.pow(mouseX - noBtnCenterX, 2) + 
+                Math.pow(mouseY - noBtnCenterY, 2)
+            );
+            
+            const threshold = 120; // Distance in pixels to trigger movement
+            
+            if (distance < threshold) {
+                lastMoveTime = now;
+                
+                // Calculate direction away from cursor
+                const angle = Math.atan2(noBtnCenterY - mouseY, noBtnCenterX - mouseX);
+                
+                // Move button away from cursor
+                const moveDistance = 200;
+                const newX = Math.cos(angle) * moveDistance;
+                const newY = Math.sin(angle) * moveDistance;
+                
+                // Get viewport bounds
+                const maxX = (window.innerWidth - noBtnRect.width) / 2 - noBtnRect.left - noBtnRect.width / 2;
+                const minX = -noBtnRect.left - noBtnRect.width / 2 + 20;
+                const maxY = (window.innerHeight - noBtnRect.height) / 2 - noBtnRect.top - noBtnRect.height / 2;
+                const minY = -noBtnRect.top - noBtnRect.height / 2 + 20;
+                
+                // Clamp values to keep button in viewport
+                const clampedX = Math.max(minX, Math.min(maxX, newX));
+                const clampedY = Math.max(minY, Math.min(maxY, newY));
+                
+                noBtn.style.transform = `translate(${clampedX}px, ${clampedY}px)`;
+            }
+        });
 
-      const rect = noBtn.getBoundingClientRect();
-      const dx = e.clientX - (rect.left + rect.width / 2);
-      const dy = e.clientY - (rect.top + rect.height / 2);
-      const distance = Math.sqrt(dx * dx + dy * dy);
+        // Yes button click handler
+        yesBtn.addEventListener('click', () => {
+            questionScreen.classList.add('hidden');
+            resultScreen.classList.add('visible');
+            createConfetti();
+        });
 
-      if (distance < 80) {
-        const moveX = (Math.random() * 200 - 100);
-        const moveY = (Math.random() * 200 - 100);
-        noBtn.style.transform = `translate(${moveX}px, ${moveY}px)`;
-        lastMove = now;
-      }
-    });
-
-    // Confetti
-    function confettiBurst() {
-      const colors = ["#ff5a8a", "#ffd166", "#06d6a0", "#118ab2"];
-      for (let i = 0; i < 40; i++) {
-        const dot = document.createElement("div");
-        dot.className = "confetti";
-        dot.style.left = Math.random() * window.innerWidth + "px";
-        dot.style.top = Math.random() * window.innerHeight + "px";
-        dot.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-        document.body.appendChild(dot);
-        setTimeout(() => dot.remove(), 3000);
-      }
-    }
-
-    yesBtn.addEventListener("click", () => {
-      question.style.display = "none";
-      result.style.display = "block";
-      confettiBurst();
-    });
-  </script>
-
+        // Create confetti animation
+        function createConfetti() {
+            const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#f9ca24', '#6c5ce7', '#fd79a8', '#a29bfe'];
+            const confettiCount = 100;
+            
+            for (let i = 0; i < confettiCount; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.top = '-10px';
+                    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.width = (Math.random() * 10 + 5) + 'px';
+                    confetti.style.height = (Math.random() * 10 + 5) + 'px';
+                    confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                    confetti.style.animationDelay = '0s';
+                    
+                    confettiContainer.appendChild(confetti);
+                    
+                    // Remove confetti after animation
+                    setTimeout(() => {
+                        confetti.remove();
+                    }, 5000);
+                }, i * 30);
+            }
+        }
+    </script>
 </body>
 </html>
