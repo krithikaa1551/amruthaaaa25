@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Important Question 👀</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #ffffff;
+      height: 100vh;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .container {
+      max-width: 500px;
+      padding: 20px;
+      position: relative;
+      z-index: 2;
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 30px;
+    }
+
+    button {
+      padding: 12px 22px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      position: absolute;
+      transition: all 0.3s ease; /* smooth sliding for No button */
+    }
+
+    #yesBtn {
+      background-color: #ff5a8a;
+      color: #fff;
+      position: relative;
+    }
+
+    #noBtn {
+      background-color: #ddd;
+    }
+
+    .result {
+      display: none;
+      opacity: 0;
+      animation: fadeIn 1.2s ease forwards;
+      position: relative;
+    }
+
+    img {
+      max-width: 100%;
+      border-radius: 12px;
+      margin-bottom: 20px;
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    /* Confetti dots */
+    .confetti {
+      position: fixed;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      animation: drop 2.5s ease forwards;
+      z-index: 1;
+    }
+
+    @keyframes drop {
+      0% { transform: translateY(-20px); opacity: 1; }
+      100% { transform: translateY(40px); opacity: 0; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Question Screen -->
+  <div class="container" id="question">
+    <h1>Do you accept that you’re officially closer to 30 than 20?</h1>
+    <button id="yesBtn">Yes</button>
+    <button id="noBtn">No</button>
+  </div>
+
+  <!-- Result Screen -->
+  <div class="container result" id="result">
+    <img src="https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif" alt="Aging but still hot">
+    <p>
+      🚨 <strong>Quarter-Life Existential Crisis Activated</strong> 🚨<br><br>
+      Age: <b>Closer to 30! 🐒</b><br>
+      Relationship status: <b>Still single & hot ❤️‍🔥</b><br>
+      My bday wish for you: <b>I hope you get to celebrate the next Valentine’s Day with your man of dreams 😉</b><br><br>
+      <strong>Happiest 25, Amruthaaaaaa Varshiniiii!!! 🎉</strong>
+    </p>
+  </div>
+
+  <script>
+    const noBtn = document.getElementById("noBtn");
+    const yesBtn = document.getElementById("yesBtn");
+    const question = document.getElementById("question");
+    const result = document.getElementById("result");
+
+    // Smooth dodging No button (never disappears)
+    noBtn.addEventListener("mousemove", (e) => {
+      const btnRect = noBtn.getBoundingClientRect();
+      const offset = 50; // distance from cursor to trigger move
+      const distanceX = e.clientX - (btnRect.left + btnRect.width / 2);
+      const distanceY = e.clientY - (btnRect.top + btnRect.height / 2);
+
+      if (Math.abs(distanceX) < offset && Math.abs(distanceY) < offset) {
+        // move smoothly to random position inside window
+        noBtn.style.left = Math.random() * (window.innerWidth - btnRect.width) + "px";
+        noBtn.style.top = Math.random() * (window.innerHeight - btnRect.height) + "px";
+      }
+    });
+
+    // Confetti function
+    function spawnConfetti() {
+      const colors = ["#ff5a8a", "#ffd166", "#06d6a0", "#118ab2"];
+      const centerX = window.innerWidth / 2 - 90;
+      const centerY = window.innerHeight / 2 - 120;
+
+      const points = [
+        [0,0],[20,0],[40,0],
+        [40,20],[20,40],[0,60],[0,80],[20,80],[40,80],
+        [80,0],
+        [120,0],[140,0],[160,0],
+        [120,20],[120,40],[140,40],[160,40],
+        [160,60],[120,80],[140,80],[160,80]
+      ];
+
+      points.forEach(([x, y]) => {
+        const dot = document.createElement("div");
+        dot.classList.add("confetti");
+        dot.style.left = centerX + x + "px";
+        dot.style.top = centerY + y + "px";
+        dot.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        document.body.appendChild(dot);
+        setTimeout(() => dot.remove(), 3000);
+      });
+    }
+
+    // Yes button click
+    yesBtn.addEventListener("click", () => {
+      question.style.display = "none";
+      result.style.display = "block";
+      spawnConfetti();
+    });
+  </script>
+
+</body>
+</html>
