@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Important Question 👀</title>
+
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -25,7 +26,7 @@
 
     h1 {
       font-size: 24px;
-      margin-bottom: 30px;
+      margin-bottom: 40px;
     }
 
     button {
@@ -34,25 +35,26 @@
       border: none;
       border-radius: 8px;
       cursor: pointer;
-      position: absolute;
-      transition: all 0.3s ease; /* smooth sliding for No button */
     }
 
     #yesBtn {
       background-color: #ff5a8a;
       color: #fff;
-      position: relative;
+      margin-right: 20px;
     }
 
     #noBtn {
       background-color: #ddd;
+      position: absolute;
+      left: 60%;
+      top: 65%;
+      transition: transform 0.3s ease; /* smooth slide */
     }
 
     .result {
       display: none;
       opacity: 0;
       animation: fadeIn 1.2s ease forwards;
-      position: relative;
     }
 
     img {
@@ -65,40 +67,41 @@
       to { opacity: 1; }
     }
 
-    /* Confetti dots */
+    /* Confetti */
     .confetti {
       position: fixed;
       width: 8px;
       height: 8px;
       border-radius: 50%;
-      animation: drop 2.5s ease forwards;
+      animation: fall 2.5s ease forwards;
       z-index: 1;
     }
 
-    @keyframes drop {
+    @keyframes fall {
       0% { transform: translateY(-20px); opacity: 1; }
-      100% { transform: translateY(40px); opacity: 0; }
+      100% { transform: translateY(60px); opacity: 0; }
     }
   </style>
 </head>
 
 <body>
 
-  <!-- Question Screen -->
+  <!-- Question -->
   <div class="container" id="question">
     <h1>Do you accept that you’re officially closer to 30 than 20?</h1>
     <button id="yesBtn">Yes</button>
     <button id="noBtn">No</button>
   </div>
 
-  <!-- Result Screen -->
+  <!-- Result -->
   <div class="container result" id="result">
-    <img src="https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif" alt="Aging but still hot">
+    <img src="https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif">
     <p>
       🚨 <strong>Quarter-Life Existential Crisis Activated</strong> 🚨<br><br>
-      Age: <b>Closer to 30! 🐒</b><br>
-      Relationship status: <b>Still single & hot ❤️‍🔥</b><br>
-      My bday wish for you: <b>I hope you get to celebrate the next Valentine’s Day with your man of dreams 😉</b><br><br>
+      <strong>Age:</strong> <b>Closer to 30! 🐒</b><br>
+      <strong>Relationship status:</strong> <b>Still single & hot ❤️‍🔥</b><br>
+      <strong>My bday wish for you:</strong><br>
+      <b>I hope you get to celebrate the next Valentine’s Day with your man of dreams 😉</b><br><br>
       <strong>Happiest 25, Amruthaaaaaa Varshiniiii!!! 🎉</strong>
     </p>
   </div>
@@ -109,51 +112,44 @@
     const question = document.getElementById("question");
     const result = document.getElementById("result");
 
-    // Smooth dodging No button (never disappears)
-    noBtn.addEventListener("mousemove", (e) => {
-      const btnRect = noBtn.getBoundingClientRect();
-      const offset = 50; // distance from cursor to trigger move
-      const distanceX = e.clientX - (btnRect.left + btnRect.width / 2);
-      const distanceY = e.clientY - (btnRect.top + btnRect.height / 2);
+    let lastMove = 0;
 
-      if (Math.abs(distanceX) < offset && Math.abs(distanceY) < offset) {
-        // move smoothly to random position inside window
-        noBtn.style.left = Math.random() * (window.innerWidth - btnRect.width) + "px";
-        noBtn.style.top = Math.random() * (window.innerHeight - btnRect.height) + "px";
+    // Cursor proximity detection (THIS is the fix)
+    document.addEventListener("mousemove", (e) => {
+      const now = Date.now();
+      if (now - lastMove < 300) return; // cooldown
+
+      const rect = noBtn.getBoundingClientRect();
+      const dx = e.clientX - (rect.left + rect.width / 2);
+      const dy = e.clientY - (rect.top + rect.height / 2);
+      const distance = Math.sqrt(dx * dx + dy * dy);
+
+      if (distance < 80) {
+        const moveX = (Math.random() * 200 - 100);
+        const moveY = (Math.random() * 200 - 100);
+        noBtn.style.transform = `translate(${moveX}px, ${moveY}px)`;
+        lastMove = now;
       }
     });
 
-    // Confetti function
-    function spawnConfetti() {
+    // Confetti
+    function confettiBurst() {
       const colors = ["#ff5a8a", "#ffd166", "#06d6a0", "#118ab2"];
-      const centerX = window.innerWidth / 2 - 90;
-      const centerY = window.innerHeight / 2 - 120;
-
-      const points = [
-        [0,0],[20,0],[40,0],
-        [40,20],[20,40],[0,60],[0,80],[20,80],[40,80],
-        [80,0],
-        [120,0],[140,0],[160,0],
-        [120,20],[120,40],[140,40],[160,40],
-        [160,60],[120,80],[140,80],[160,80]
-      ];
-
-      points.forEach(([x, y]) => {
+      for (let i = 0; i < 40; i++) {
         const dot = document.createElement("div");
-        dot.classList.add("confetti");
-        dot.style.left = centerX + x + "px";
-        dot.style.top = centerY + y + "px";
+        dot.className = "confetti";
+        dot.style.left = Math.random() * window.innerWidth + "px";
+        dot.style.top = Math.random() * window.innerHeight + "px";
         dot.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
         document.body.appendChild(dot);
         setTimeout(() => dot.remove(), 3000);
-      });
+      }
     }
 
-    // Yes button click
     yesBtn.addEventListener("click", () => {
       question.style.display = "none";
       result.style.display = "block";
-      spawnConfetti();
+      confettiBurst();
     });
   </script>
 
