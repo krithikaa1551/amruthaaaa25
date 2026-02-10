@@ -93,6 +93,25 @@
             pointer-events: none;
         }
 
+        .hover-text {
+            position: fixed;
+            background: #FF6B9D;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: bold;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
+            white-space: nowrap;
+        }
+
+        .hover-text.visible {
+            opacity: 1;
+        }
+
         .result-screen img {
             width: 100%;
             max-width: 400px;
@@ -331,6 +350,7 @@
                 <button class="yes-btn" id="yesBtn">Yes! 🎉</button>
                 <button class="no-btn" id="noBtn">No 😢</button>
             </div>
+            <div class="hover-text" id="hoverText"></div>
         </div>
 
         <!-- Birthday Message Screen -->
@@ -340,7 +360,7 @@
                 🚨 <strong>Quarter-Life Existential Crisis Activated</strong> 🚨<br><br>
                 Age: <b>Closer to 30! 🐒</b><br>
                 Relationship status: <b>Still single & hot ❤️‍🔥</b><br>
-                My best wish for you: <b>I hope you get to celebrate the next Valentine's Day with the man of yours dreams 😉</b>
+                My bday wish for you: <b>I hope you get to celebrate the next Valentine's Day with your man of dreams 😉</b>
             </p>
             <button class="cake-btn" id="cakeBtn">🎂 Cut the cake now</button>
         </div>
@@ -395,9 +415,21 @@
         const cakeBtn = document.getElementById('cakeBtn');
         const blowBtn = document.getElementById('blowBtn');
         const confettiContainer = document.getElementById('confettiContainer');
+        const hoverText = document.getElementById('hoverText');
 
         let lastMoveTime = 0;
         const moveCooldown = 100;
+        let currentTextIndex = 0;
+
+        const funnyTexts = [
+            "Are you sure, old lady? 👵",
+            "Do you still think you're young? 🤔",
+            "Running away from the truth? 🏃‍♀️",
+            "Age is just a number... a BIG one! 😂",
+            "Denial won't make you younger! 🙈",
+            "Accept it, grandma! 👴",
+            "Your knees already know the truth! 🦵"
+        ];
 
         // No button movement logic
         document.addEventListener('mousemove', (e) => {
@@ -423,6 +455,14 @@
             if (distance < threshold) {
                 lastMoveTime = now;
                 
+                // Show funny text
+                hoverText.textContent = funnyTexts[currentTextIndex];
+                hoverText.style.left = mouseX + 20 + 'px';
+                hoverText.style.top = mouseY - 40 + 'px';
+                hoverText.classList.add('visible');
+                
+                currentTextIndex = (currentTextIndex + 1) % funnyTexts.length;
+                
                 const angle = Math.atan2(noBtnCenterY - mouseY, noBtnCenterX - mouseX);
                 const moveDistance = 200;
                 const newX = Math.cos(angle) * moveDistance;
@@ -437,6 +477,9 @@
                 const clampedY = Math.max(minY, Math.min(maxY, newY));
                 
                 noBtn.style.transform = `translate(${clampedX}px, ${clampedY}px)`;
+            } else {
+                // Hide text when cursor is far
+                hoverText.classList.remove('visible');
             }
         });
 
